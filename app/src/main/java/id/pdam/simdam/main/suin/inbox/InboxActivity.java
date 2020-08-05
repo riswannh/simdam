@@ -1,14 +1,16 @@
-package id.pdam.simdam;
+package id.pdam.simdam.main.suin.inbox;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import id.pdam.simdam.R;
+
+public class InboxActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.inbox_activity);
     }
 }
