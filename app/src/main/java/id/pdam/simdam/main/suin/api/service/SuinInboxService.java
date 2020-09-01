@@ -15,6 +15,7 @@ public interface SuinInboxService {
     @GET(Constant.API.URL_GET_SUIN_INBOX)
     Call<BaseDao<List<SuinInboxDao>>> getInbox(
             @Query("idPegawai") String idPegawai,
-            @Query("offset") int offset
+            @Query("offset") int offset,
+            @Query("limit") int limit
     );
 }

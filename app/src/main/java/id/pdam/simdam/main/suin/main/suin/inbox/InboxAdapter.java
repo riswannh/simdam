@@ -25,6 +25,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 2;
     private boolean isFooterVisible;
+    private int errorFooter;
 
     public InboxAdapter(Context context,ArrayList<SuinInboxDao> dataList,AdapterListener listener){
     this.listener = listener;
@@ -59,7 +60,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
         }else if (holder instanceof FooterHolder){
-            SuinFooterVM viewVM = new SuinFooterVM("loading",isFooterVisible);
+            SuinFooterVM viewVM = new SuinFooterVM(errorFooter,isFooterVisible);
             ((FooterHolder)holder).getBinding().setVariable(BR.vm, viewVM);
         }
     }
@@ -72,6 +73,11 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             isFooterVisible = footerVisible;
             notifyItemChanged(dataList.size());
         }
+    }
+
+    public void setErrorFooter(int error) {
+        errorFooter = error;
+        notifyItemChanged(dataList.size());
     }
 
     @Override

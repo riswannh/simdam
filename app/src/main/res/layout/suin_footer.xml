@@ -8,23 +8,22 @@
             name="vm"
             type="id.pdam.simdam.main.suin.main.suin.SuinFooterVM" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:orientation="vertical"
         android:visibility="@{vm.isVisible ? View.VISIBLE:View.GONE}">
 
         <TextView
             android:id="@+id/footer_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="25dp"
             android:text="@={vm.pesan}"
             android:textAllCaps="true"
             android:textColor="@android:color/black"
             android:textStyle="bold"
-            tools:text="Memuat.."/>
+            tools:text="Memuat.." />
     </LinearLayout>
 </layout>

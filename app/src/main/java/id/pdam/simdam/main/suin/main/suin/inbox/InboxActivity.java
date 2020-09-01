@@ -10,13 +10,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import id.pdam.simdam.R;
 import id.pdam.simdam.databinding.SuinInboxActivityBinding;
+import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.SuinInboxDao;
+import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
+import id.pdam.simdam.main.suin.api.service.SuinInboxService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class InboxActivity extends AppCompatActivity implements InboxAdapter.AdapterListener {
 
@@ -27,14 +35,21 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
     protected LinearLayoutManager linearLayoutManager;
     SwipeRefreshLayout swipeRefreshLayout;
     Context context;
+    SuinInboxService mService;
     private int totalItem = 0;
-    private int page = 1;
+    private int offset = 0;
+    private int limit = 10;
+    boolean isRefresh = false;
+    boolean isLoad = false;
+    boolean isCallApi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suin_inbox_activity);
         config();
+        mService = ApiClient.getClient().create(SuinInboxService.class);
+        callApi(offset, limit);
     }
 
     private void config() {
@@ -50,18 +65,58 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         recyclerView.addOnScrollListener(scrollListener);
         adapter.notifyDataSetChanged();
         adapter.setFooterVisible(true);
+        adapter.setErrorFooter(0);
 
         swipeRefreshLayout = binding.srInbox;
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(context, "Refresh", Toast.LENGTH_LONG).show();
-                swipeRefreshLayout.setRefreshing(false);
+                isRefresh = true;
+                callApi(0, 10);
             }
         });
     }
 
+    public void callApi(int offset, int limit) {
+        String idPegawai = "405";
+        isCallApi = true;
+        isLoad = true;
+        Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idPegawai, offset, limit);
+        callInbox.enqueue(new Callback<BaseDao<List<SuinInboxDao>>>() {
+            @Override
+            public void onResponse(Call<BaseDao<List<SuinInboxDao>>> call, Response<BaseDao<List<SuinInboxDao>>> response) {
+                Log.d("TAG",response.raw().request().toString());
+                adapter.setFooterVisible(false);
+                isCallApi = false;
+                if (isRefresh) {
+                    stopRefreshing();
+                    dataList.clear();
+                    totalItem = 0;
+                    isRefresh = false;
+                }
+
+                if (response.body().DATA.isEmpty()) {
+                    dataList.clear();
+                    adapter.setErrorFooter(1);
+                    isLoad = false;
+                } else {
+                    dataList.addAll(response.body().DATA);
+                    totalItem = dataList.size();
+                    if (totalItem % 10 == 0)
+                        isLoad = true;
+                    else
+                        isLoad = false;
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseDao<List<SuinInboxDao>>> call, Throwable t) {
+
+            }
+        });
+    }
 
     public static void startThisActivity(Context context) {
         Intent intent = new Intent(context, InboxActivity.class);
@@ -77,10 +132,23 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         @Override
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (totalItem == linearLayoutManager.findLastCompletelyVisibleItemPosition()) {
+            if (totalItem == linearLayoutManager.findLastCompletelyVisibleItemPosition() && !isRefresh && isLoad && !isCallApi) {
                 adapter.setFooterVisible(true);
-                adapter.notifyDataSetChanged();
+                limit += 10;
+                offset++;
+                callApi(offset,limit);
+
             }
         }
     };
+
+    public void stopRefreshing() {
+        binding.srInbox.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                binding.srInbox.setRefreshing(false);
+            }
+        }, 100);
+    }
 }
