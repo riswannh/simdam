@@ -9,9 +9,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,8 @@ import id.pdam.simdam.databinding.SuinInboxActivityBinding;
 import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.SuinInboxDao;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
-import id.pdam.simdam.main.suin.api.service.SuinInboxService;
+import id.pdam.simdam.main.suin.api.service.SuinService;
+import id.pdam.simdam.main.suin.main.suin.konten.KontenActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +36,8 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
     protected LinearLayoutManager linearLayoutManager;
     SwipeRefreshLayout swipeRefreshLayout;
     Context context;
-    SuinInboxService mService;
+    SuinService mService;
+
     private int totalItem = 0;
     private int offset = 0;
     private int limit = 10;
@@ -48,7 +50,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suin_inbox_activity);
         config();
-        mService = ApiClient.getClient().create(SuinInboxService.class);
+        mService = ApiClient.getClient().create(SuinService.class);
         callApi(offset, limit);
     }
 
@@ -79,10 +81,10 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
     }
 
     public void callApi(int offset, int limit) {
-        String idPegawai = "405";
+        String idUser = "405";
         isCallApi = true;
         isLoad = true;
-        Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idPegawai, offset, limit);
+        Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idUser, offset, limit);
         callInbox.enqueue(new Callback<BaseDao<List<SuinInboxDao>>>() {
             @Override
             public void onResponse(Call<BaseDao<List<SuinInboxDao>>> call, Response<BaseDao<List<SuinInboxDao>>> response) {
@@ -124,8 +126,8 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
     }
 
     @Override
-    public void onClick(int position, SuinInboxDao item) {
-
+    public void onClick(int position, String idSuin) {
+        KontenActivity.startThisActivity(this,idSuin);
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
@@ -151,4 +153,6 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
             }
         }, 100);
     }
+
+
 }

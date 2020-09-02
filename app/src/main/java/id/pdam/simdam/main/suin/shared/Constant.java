@@ -11,5 +11,6 @@ public class Constant {
         public static final String URL_LOGIN ="login/pegawai";
 
         public static final String URL_GET_SUIN_INBOX = "suin/getinbox";
+        public static final String URL_GET_SUIN_KONTEN = "suin/getbaca";
     }
 }

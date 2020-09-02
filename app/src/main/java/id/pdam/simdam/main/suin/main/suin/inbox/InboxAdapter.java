@@ -56,7 +56,7 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((ItemHolder) holder).getBinding().getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onClick(position, inbox);
+                    listener.onClick(position, dataList.get(position).ID);
                 }
             });
         }else if (holder instanceof FooterHolder){
@@ -121,6 +121,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public interface AdapterListener {
-        void onClick(int position, SuinInboxDao item);
+        void onClick(int position, String idSuin);
     }
 }
