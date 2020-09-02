@@ -1,15 +1,16 @@
 package id.pdam.simdam.main.suin.main.suin.konten;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class KontenActivity extends AppCompatActivity {
         idSuin = getIntent().getStringExtra("idSuin");
         mService = ApiClient.getClient().create(SuinService.class);
         config();
-        callApi(idSuin,min,max);
+        new Task().execute();
     }
 
     private void config() {
@@ -61,7 +62,7 @@ public class KontenActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(scrollListener);
-        adapter.notifyDataSetChanged();
+        recyclerView.setHasFixedSize(true);
         adapter.setFooterVisible(true);
         adapter.setErrorFooter(0);
     }
@@ -107,7 +108,7 @@ public class KontenActivity extends AppCompatActivity {
                 adapter.setFooterVisible(true);
                 max += 10;
                 min++;
-                callApi(idSuin,min, max);
+                new Task().execute();
 
             }
         }
@@ -117,5 +118,14 @@ public class KontenActivity extends AppCompatActivity {
         Intent intent = new Intent(context, KontenActivity.class);
         intent.putExtra("idSuin",idSuin);
         context.startActivity(intent);
+    }
+
+    private class Task extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            callApi(idSuin,min,max);
+            return null;
+        }
     }
 }

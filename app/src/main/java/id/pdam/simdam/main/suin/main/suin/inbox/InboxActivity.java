@@ -51,7 +51,8 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         setContentView(R.layout.suin_inbox_activity);
         config();
         mService = ApiClient.getClient().create(SuinService.class);
-        callApi(offset, limit);
+
+        new Task().execute();
     }
 
     private void config() {
@@ -65,9 +66,9 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(scrollListener);
-        adapter.notifyDataSetChanged();
         adapter.setFooterVisible(true);
         adapter.setErrorFooter(0);
+        recyclerView.setHasFixedSize(true);
 
         swipeRefreshLayout = binding.srInbox;
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -75,7 +76,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
             @Override
             public void onRefresh() {
                 isRefresh = true;
-                callApi(0, 10);
+                new Task().execute();
             }
         });
     }
@@ -138,7 +139,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
                 adapter.setFooterVisible(true);
                 limit += 10;
                 offset++;
-                callApi(offset,limit);
+                new Task().execute();
 
             }
         }
@@ -154,5 +155,12 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         }, 100);
     }
 
+    private class Task extends AsyncTask<Void,Void,Void>{
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            callApi(offset,limit);
+            return null;
+        }
+    }
 }

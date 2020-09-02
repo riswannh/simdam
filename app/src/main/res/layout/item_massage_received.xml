@@ -34,7 +34,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/chat_bubble"
             android:maxWidth="240dp"
-
+            android:padding="@dimen/padding_8_dp"
             android:text="Hi Dare!"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
