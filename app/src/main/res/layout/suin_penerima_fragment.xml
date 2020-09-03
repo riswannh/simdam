@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="id.pdam.simdam.main.suin.main.suin.compose.PenerimaVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.suin.main.suin.compose.PenerimaFragment"
+        >
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
