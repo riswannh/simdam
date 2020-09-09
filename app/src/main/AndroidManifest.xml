@@ -13,20 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".main.suin.main.suin.compose.ComposeActivity">
-
-        </activity>
-        <activity android:name=".main.suin.main.suin.konten.KontenActivity" />
-        <activity
-            android:name=".main.suin.main.suin.inbox.InboxActivity"
-            android:screenOrientation="unspecified"></activity>
-        <activity
-            android:name=".main.suin.main.menu.MenuSuinActivity"
-            android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".main.suin.main.suin.konten.KontenActivity" />
+        <activity
+            android:name=".main.suin.main.suin.inbox.InboxActivity"
+            android:screenOrientation="unspecified" />
+        <activity
+            android:name=".main.suin.main.menu.MenuSuinActivity"
+            android:screenOrientation="unspecified">
+
         </activity>
     </application>
 
