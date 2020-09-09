@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".main.suin.main.suin.compose.penerima.SearchPenerimaActivity"></activity>
+        <activity android:name=".main.suin.main.suin.compose.penerima.PenerimaActivity" />
         <activity android:name=".main.suin.main.suin.compose.ComposeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +27,7 @@
             android:screenOrientation="unspecified" />
         <activity
             android:name=".main.suin.main.menu.MenuSuinActivity"
-            android:screenOrientation="unspecified">
-
-        </activity>
+            android:screenOrientation="unspecified" />
     </application>
 
 </manifest>
