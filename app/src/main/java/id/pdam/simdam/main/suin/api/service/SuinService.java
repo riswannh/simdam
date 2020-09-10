@@ -3,6 +3,7 @@ package id.pdam.simdam.main.suin.api.service;
 import java.util.List;
 
 import id.pdam.simdam.main.suin.api.dao.BaseDao;
+import id.pdam.simdam.main.suin.api.dao.FilterItemDao;
 import id.pdam.simdam.main.suin.api.dao.KontenSuinDao;
 import id.pdam.simdam.main.suin.api.dao.SuinInboxDao;
 import id.pdam.simdam.main.suin.shared.Constant;
@@ -26,5 +27,14 @@ public interface SuinService {
             @Query("idSuin") String idSuin,
             @Query("min") int min,
             @Query("max") int max
+    );
+
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
+    @GET(Constant.API.URL_GET_SUIN_JENIS_PENERIMA)
+    Call<BaseDao<List<FilterItemDao>>> getJenisPenerima(
+            @Query("offset") int offset,
+            @Query("limit") int limit,
+            @Query("keyword") String keyword,
+            @Query("jenis") int jenis
     );
 }
