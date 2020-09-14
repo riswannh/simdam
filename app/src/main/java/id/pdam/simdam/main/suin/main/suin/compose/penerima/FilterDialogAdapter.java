@@ -17,7 +17,7 @@ import id.pdam.simdam.main.suin.api.dao.FilterItemDao;
 import id.pdam.simdam.main.suin.main.suin.SuinFooterVM;
 import id.pdam.simdam.main.suin.main.suin.inbox.InboxAdapter;
 
-public class FilterDialogAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class FilterDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private ArrayList<FilterItemDao> dataList;
     private Context context;
     private AdapterFilterItemListener listener;
@@ -39,6 +39,7 @@ public class FilterDialogAdapter  extends RecyclerView.Adapter<RecyclerView.View
         }
         return TYPE_ITEM;
     }
+
     public void setFooterVisible(boolean footerVisible){
         if (isFooterVisible){
             isFooterVisible = footerVisible;
@@ -80,15 +81,15 @@ public class FilterDialogAdapter  extends RecyclerView.Adapter<RecyclerView.View
                     listener.onClick(position,inbox);
                 }
             });
-        }else if (holder instanceof InboxAdapter.FooterHolder){
+        }else if (holder instanceof FooterHolder){
             SuinFooterVM viewVM = new SuinFooterVM(errorFooter,isFooterVisible);
-            ((InboxAdapter.FooterHolder)holder).getBinding().setVariable(BR.vm, viewVM);
+            ((FooterHolder)holder).getBinding().setVariable(BR.vm, viewVM);
         }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataList.size()+1;
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder{

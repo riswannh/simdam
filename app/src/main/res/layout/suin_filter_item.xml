@@ -10,7 +10,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvNama"
@@ -22,6 +22,7 @@
         android:text="@={vm.nama}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Keuangan"/>
+        tools:text="Keuangan"
+        android:background="@drawable/selector_btn_press"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

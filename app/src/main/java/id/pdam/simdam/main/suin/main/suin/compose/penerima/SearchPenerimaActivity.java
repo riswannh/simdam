@@ -3,6 +3,7 @@ package id.pdam.simdam.main.suin.main.suin.compose.penerima;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +34,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
     SuinSearchPenerimaActivityBinding binding;
     private Dialog filterDialog;
     private Context context;
-    public String[] item = {"Jabatan", "Departemen", "Divisi"};
+
     public ArrayList<FilterItemDao> filterItemDao = new ArrayList<>();
     SuinFilterPenerimaDialogBinding dialogBinding;
     private RecyclerView rvJenisPenerima;
@@ -41,6 +42,8 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
     FilterDialogAdapter dialogAdapter;
     protected LinearLayoutManager linearLayoutManager;
 
+    SuinPenerimaFilterDialog dialog;
+    FragmentManager fm = getSupportFragmentManager();
     private int totalItem = 0;
     private int offset = 0;
     private int limit = 10;
@@ -63,59 +66,50 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
         binding = DataBindingUtil.setContentView(this, R.layout.suin_search_penerima_activity);
         SearchPenerimaActivityVM viewModel = new SearchPenerimaActivityVM(this);
         binding.setVm(viewModel);
+
         dialogConfig();
 
     }
 
     public void dialogConfig() {
-        filterDialog = new Dialog(SearchPenerimaActivity.this);
-        filterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogBinding = SuinFilterPenerimaDialogBinding.inflate(LayoutInflater.from(context));
-        filterDialog.setContentView(dialogBinding.getRoot());
-        filterDialogConfig();
-        filterDialog.setCancelable(true);
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, item);
-
-        dialogBinding.spinnerJenisKpd.setAdapter(adapter);
-
-        dialogBinding.spinnerJenisKpd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        dialogBinding.etSearch.setVisibility(View.GONE);
-                        dialogBinding.btnSearch.setVisibility(View.GONE);
-                        jenis = 0;
-                        callFilterApi("",0,0,0);
-                        break;
-                    case 1:
-                        dialogBinding.etSearch.setVisibility(View.VISIBLE);
-                        dialogBinding.btnSearch.setVisibility(View.VISIBLE);
-                        jenis = 1;
-                        callFilterApi("",0,10,1);
-                        break;
-                    case 2:
-                        dialogBinding.etSearch.setVisibility(View.VISIBLE);
-                        dialogBinding.btnSearch.setVisibility(View.VISIBLE);
-                        jenis = 2;
-                        callFilterApi("",0,10,2);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//
+//        dialogBinding.spinnerJenisKpd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                switch (position) {
+//                    case 0:
+//                        dialogBinding.etSearch.setVisibility(View.GONE);
+//                        dialogBinding.btnSearch.setVisibility(View.GONE);
+//                        jenis = 0;
+//                        callFilterApi("", 0, 0, 0);
+//                        break;
+//                    case 1:
+//                        dialogBinding.etSearch.setVisibility(View.VISIBLE);
+//                        dialogBinding.btnSearch.setVisibility(View.VISIBLE);
+//                        jenis = 1;
+//                        callFilterApi("", 0, 10, 1);
+//                        break;
+//                    case 2:
+//                        dialogBinding.etSearch.setVisibility(View.VISIBLE);
+//                        dialogBinding.btnSearch.setVisibility(View.VISIBLE);
+//                        jenis = 2;
+//                        callFilterApi("", 0, 10, 2);
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         binding.btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterDialog.show();
+                dialog = SuinPenerimaFilterDialog.newInstance(0);
+                dialog.show(fm,"TEST");
             }
         });
     }
@@ -141,7 +135,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
                 dialogAdapter.setFooterVisible(true);
                 limit += 10;
                 offset++;
-                callFilterApi(keyword,offset,limit,jenis);
+                callFilterApi(keyword, offset, limit, jenis);
             }
         }
     };
@@ -175,10 +169,10 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
         return listItem;
     }
 
-    public void callFilterApi(String keyword, int offset, int limit,int jenis) {
+    public void callFilterApi(String keyword, int offset, int limit, int jenis) {
         isCallApi = true;
         isLoad = true;
-        if (jenis == 0){
+        if (jenis == 0) {
             filterItemDao.addAll(filterItemJabatan());
             totalItem = filterItemDao.size();
             if (totalItem % 10 == 0)
@@ -186,7 +180,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
             else
                 isLoad = false;
             dialogAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             Call<BaseDao<List<FilterItemDao>>> callApi = mService.getJenisPenerima(offset, limit, keyword, jenis);
             callApi.enqueue(new Callback<BaseDao<List<FilterItemDao>>>() {
                 @Override
