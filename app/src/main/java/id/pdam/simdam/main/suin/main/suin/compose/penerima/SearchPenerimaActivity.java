@@ -145,35 +145,35 @@ public class SearchPenerimaActivity extends AppCompatActivity implements FilterD
 
     }
 
-    public ArrayList<FilterItemDao> filterItemJabatan() {
-        ArrayList<FilterItemDao> listItem = new ArrayList<>();
-        for (int i = 1; i <= 6; i++) {
-            FilterItemDao item = new FilterItemDao();
-            item.ID = String.valueOf(i);
-            if (i == 1) {
-                item.NAMA = "Direksi";
-            } else if (i == 2) {
-                item.NAMA = "Senior Manager";
-            } else if (i == 3) {
-                item.NAMA = "Manager";
-            } else if (i == 4) {
-                item.NAMA = "Supervisor";
-            } else if (i == 5) {
-                item.NAMA = "Staf";
-            } else if (i == 6) {
-                item.NAMA = "Semua";
-            }
-            listItem.add(item);
-        }
-
-        return listItem;
-    }
+//    public ArrayList<FilterItemDao> filterItemJabatan() {
+//        ArrayList<FilterItemDao> listItem = new ArrayList<>();
+//        for (int i = 1; i <= 6; i++) {
+//            FilterItemDao item = new FilterItemDao();
+//            item.ID = String.valueOf(i);
+//            if (i == 1) {
+//                item.NAMA = "Direksi";
+//            } else if (i == 2) {
+//                item.NAMA = "Senior Manager";
+//            } else if (i == 3) {
+//                item.NAMA = "Manager";
+//            } else if (i == 4) {
+//                item.NAMA = "Supervisor";
+//            } else if (i == 5) {
+//                item.NAMA = "Staf";
+//            } else if (i == 6) {
+//                item.NAMA = "Semua";
+//            }
+//            listItem.add(item);
+//        }
+//
+//        return listItem;
+//    }
 
     public void callFilterApi(String keyword, int offset, int limit, int jenis) {
         isCallApi = true;
         isLoad = true;
         if (jenis == 0) {
-            filterItemDao.addAll(filterItemJabatan());
+//            filterItemDao.addAll(filterItemJabatan());
             totalItem = filterItemDao.size();
             if (totalItem % 10 == 0)
                 isLoad = true;

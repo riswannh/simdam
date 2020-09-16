@@ -145,4 +145,8 @@ public class SuinPenerimaFilterDialog extends DialogFragment implements FilterDi
         dialogAdapter.notifyDataSetChanged();
         dialogAdapter.setFooterVisible(false);
     }
+
+    public void callApi(){
+
+    }
 }
