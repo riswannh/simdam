@@ -12,14 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.suin.main.suin.compose.penerima.SearchPenerimaActivity"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".main.suin.main.suin.compose.penerima.SearchPenerimaActivity">
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
-        <activity android:name=".main.suin.main.suin.compose.penerima.PenerimaActivity" />
+        </activity>
         <activity android:name=".main.suin.main.suin.compose.ComposeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".main.suin.main.suin.konten.KontenActivity" />
         <activity

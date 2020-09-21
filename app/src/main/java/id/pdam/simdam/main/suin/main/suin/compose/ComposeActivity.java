@@ -39,15 +39,17 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suin_compose_activity);
-        jenis = getIntent().getIntExtra("jenis", 0);
-        idSuin = getIntent().getStringExtra("idSuin");
+        jenis = 0;
+        idSuin = "test";
+//        jenis = getIntent().getIntExtra("jenis", 0);
+//        idSuin = getIntent().getStringExtra("idSuin");
         config();
     }
 
     private void config() {
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.suin_compose_activity);
-        ComposeActivityVM viewModel = new ComposeActivityVM(this);
+        ComposeActivityVM viewModel = new ComposeActivityVM(this,jenis,idSuin);
         binding.setVm(viewModel);
 
         recyclerView = binding.rvAttachment;

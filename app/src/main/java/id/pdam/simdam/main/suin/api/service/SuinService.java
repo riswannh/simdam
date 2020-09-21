@@ -5,6 +5,7 @@ import java.util.List;
 import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.FilterItemDao;
 import id.pdam.simdam.main.suin.api.dao.KontenSuinDao;
+import id.pdam.simdam.main.suin.api.dao.PenerimaDao;
 import id.pdam.simdam.main.suin.api.dao.SuinInboxDao;
 import id.pdam.simdam.main.suin.shared.Constant;
 import retrofit2.Call;
@@ -30,11 +31,10 @@ public interface SuinService {
     );
 
     @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
-    @GET(Constant.API.URL_GET_SUIN_JENIS_PENERIMA)
-    Call<BaseDao<List<FilterItemDao>>> getJenisPenerima(
-            @Query("offset") int offset,
+    @GET(Constant.API.URL_GET_SUIN_PENERIMA)
+    Call<BaseDao<List<PenerimaDao>>> getPenerima(
             @Query("limit") int limit,
-            @Query("keyword") String keyword,
-            @Query("jenis") int jenis
+            @Query("offset") int offset,
+            @Query("keyword") String keyword
     );
 }
