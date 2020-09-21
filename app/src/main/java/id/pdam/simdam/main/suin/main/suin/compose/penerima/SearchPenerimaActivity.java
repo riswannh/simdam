@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchPenerimaActivity extends AppCompatActivity implements SearchPenerimaAdapter.AdapterListener,SuinPenerimaSelectedAdapter.AdapterListener {
+public class SearchPenerimaActivity extends AppCompatActivity implements SearchPenerimaAdapter.AdapterListener, SuinPenerimaSelectedAdapter.AdapterListener {
     SuinSearchPenerimaActivityBinding binding;
     private Context context;
 
@@ -35,7 +37,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
     protected LinearLayoutManager lmPenerima;
     SearchPenerimaAdapter PenerimaAdapter;
     private ArrayList<PenerimaDao> dataListPenerima = new ArrayList<>();
-
+    private ArrayList<String> idList = new ArrayList<>();
 
     private ArrayList<PenerimaDao> dataListPenerimaSelected = new ArrayList<>();
     SuinPenerimaSelectedAdapter penerimaSelectedAdapter;
@@ -72,11 +74,13 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
         rvPenerima.addOnScrollListener(scrollListener);
         PenerimaAdapter.setErrorFooter(0);
         rvPenerima.setHasFixedSize(true);
+
         binding.btnSearch.setOnClickListener(clickSearch);
+        binding.btnSelesai.setOnClickListener(clickSelesai);
 
         rvPenerimaSelected = binding.rvListSelected;
-        lmPenerimaSelected = new LinearLayoutManager(SearchPenerimaActivity.this,LinearLayoutManager.VERTICAL,false);
-        penerimaSelectedAdapter = new SuinPenerimaSelectedAdapter(this,dataListPenerimaSelected,this);
+        lmPenerimaSelected = new LinearLayoutManager(SearchPenerimaActivity.this, LinearLayoutManager.VERTICAL, false);
+        penerimaSelectedAdapter = new SuinPenerimaSelectedAdapter(this, dataListPenerimaSelected, this);
         rvPenerimaSelected.setLayoutManager(lmPenerimaSelected);
         rvPenerimaSelected.setAdapter(penerimaSelectedAdapter);
     }
@@ -89,10 +93,16 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
             limit = 10;
             offset = 0;
             dataListPenerima.clear();
-            callFilterApi(keyword,offset,limit);
+            callFilterApi(keyword, offset, limit);
         }
     };
 
+    private View.OnClickListener clickSelesai = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String str = TextUtils.join(",", idList);
+        }
+    };
 
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
@@ -109,15 +119,14 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
     };
 
 
-
     public void callFilterApi(String keyword, int offset, int limit) {
         isCallApi = true;
         isLoad = true;
-        Call<BaseDao<List<PenerimaDao>>> callPenerima = mService.getPenerima(limit,offset,keyword);
+        Call<BaseDao<List<PenerimaDao>>> callPenerima = mService.getPenerima(limit, offset, keyword);
         callPenerima.enqueue(new Callback<BaseDao<List<PenerimaDao>>>() {
             @Override
             public void onResponse(Call<BaseDao<List<PenerimaDao>>> call, Response<BaseDao<List<PenerimaDao>>> response) {
-                Log.d("TAG",response.raw().request().toString());
+                Log.d("TAG", response.raw().request().toString());
                 PenerimaAdapter.setFooterVisible(false);
                 isCallApi = false;
                 if (response.body().DATA.isEmpty()) {
@@ -142,20 +151,21 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
         });
     }
 
-    public static void startThisActiviy(Context context,int jenis,String idSuin){
-        Intent intent = new Intent(context,SearchPenerimaActivity.class);
-        intent.putExtra("jenis",jenis);
-        intent.putExtra("idSuin",idSuin);
+    public static void startThisActiviy(Context context, int jenis, String idSuin) {
+        Intent intent = new Intent(context, SearchPenerimaActivity.class);
+        intent.putExtra("jenis", jenis);
+        intent.putExtra("idSuin", idSuin);
         context.startActivity(intent);
     }
 
     @Override
     public void onClick(int position, PenerimaDao dao) {
-        if(!dataListPenerimaSelected.contains(dao)){
+        if (!dataListPenerimaSelected.contains(dao)) {
             dataListPenerimaSelected.add(dao);
+            idList.add(dao.ID);
             penerimaSelectedAdapter.notifyDataSetChanged();
-        }else {
-            Toast.makeText(context,"Penerima Sudah Ditambah",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(context, "Penerima Sudah Ditambah", Toast.LENGTH_LONG).show();
         }
     }
 
