@@ -19,9 +19,9 @@ public class ComposeActivityVM extends ViewModel {
     }
 
     // TODO: Implement the ViewModel
-    public void onClickKirim(View v){
-        SearchPenerimaActivity.startThisActiviy(mContext,jenis,idSuin);
-    }
+//    public void onClickKirim(View v){
+//        SearchPenerimaActivity.startThisActiviy(mContext,jenis,idSuin);
+//    }
 
 
 

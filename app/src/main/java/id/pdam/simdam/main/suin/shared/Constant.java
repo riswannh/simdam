@@ -13,5 +13,7 @@ public class Constant {
         public static final String URL_GET_SUIN_INBOX = "suin/getinbox";
         public static final String URL_GET_SUIN_KONTEN = "suin/getbaca";
         public static final String URL_GET_SUIN_PENERIMA = "suin/getpenerima";
+
+        public static final String URL_POST_LAMPIRAN = "suin/uploadlampiran";
     }
 }
