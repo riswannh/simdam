@@ -22,6 +22,8 @@ import id.pdam.simdam.R;
 import id.pdam.simdam.databinding.SuinSearchPenerimaActivityBinding;
 import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.PenerimaDao;
+import id.pdam.simdam.main.suin.api.param.SuinBalasParam;
+import id.pdam.simdam.main.suin.api.param.SuinParam;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
 import retrofit2.Call;
@@ -52,18 +54,32 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
     boolean isCallApi = false;
     int jenis = 0;
     String keyword;
+    String idSuin;
+    int tipeLayout;
+    SuinParam suin;
+    SuinBalasParam balas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suin_search_penerima_activity);
         mService = ApiClient.getClient().create(SuinService.class);
+        jenis = getIntent().getIntExtra("jenis", 0);
+        idSuin = getIntent().getStringExtra("idSuin");
+        tipeLayout = getIntent().getIntExtra("tipeLayout", 0);
+        suin = (SuinParam) getIntent().getSerializableExtra("suin");
+        balas = (SuinBalasParam) getIntent().getSerializableExtra("balas");
         config();
     }
 
     private void config() {
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.suin_search_penerima_activity);
+        if (jenis == 0 && tipeLayout == 0) {
+            binding.btnSelesai.setText("Atur Terusan");
+        } else {
+            binding.btnSelesai.setText("Kirim");
+        }
         SearchPenerimaActivityVM viewModel = new SearchPenerimaActivityVM(this);
         binding.setVm(viewModel);
         rvPenerima = binding.rvListPenerima;
@@ -100,7 +116,23 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
     private View.OnClickListener clickSelesai = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String str = TextUtils.join(",", idList);
+            if (jenis == 0 && tipeLayout == 0) {
+                if (!idList.isEmpty()){
+                    String id = TextUtils.join(",", idList);
+                    suin.kpd = id;
+                    startThisActiviy(context, 0, 1, "",suin,balas);
+                }else {
+                    Toast.makeText(context,"Mohon Pilih Penerima",Toast.LENGTH_LONG).show();
+                }
+
+            } else {
+                if (!idList.isEmpty()){
+                    String id = TextUtils.join(",", idList);
+                    suin.tembusan = id;
+                    suin.cekTembusan = "";
+                }
+            }
+
         }
     };
 
@@ -151,10 +183,13 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
         });
     }
 
-    public static void startThisActiviy(Context context, int jenis, String idSuin) {
+    public static void startThisActiviy(Context context, int jenis, int tipeLayout, String idSuin, SuinParam suin, SuinBalasParam balas) {
         Intent intent = new Intent(context, SearchPenerimaActivity.class);
         intent.putExtra("jenis", jenis);
         intent.putExtra("idSuin", idSuin);
+        intent.putExtra("tipeLayout", tipeLayout);
+        intent.putExtra("suin", suin);
+        intent.putExtra("balas", balas);
         context.startActivity(intent);
     }
 

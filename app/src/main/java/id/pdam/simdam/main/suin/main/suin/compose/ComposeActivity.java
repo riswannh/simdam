@@ -22,8 +22,11 @@ import id.pdam.simdam.R;
 import id.pdam.simdam.databinding.SuinComposeActivityBinding;
 import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.param.LampiranParam;
+import id.pdam.simdam.main.suin.api.param.SuinBalasParam;
+import id.pdam.simdam.main.suin.api.param.SuinParam;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
+import id.pdam.simdam.main.suin.main.suin.compose.penerima.SearchPenerimaActivity;
 import id.pdam.simdam.main.suin.shared.FileUtil;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -34,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdapter.AdapterListener {
-    int jenis;
+    int jenis = 0;
     String idSuin;
     SuinComposeActivityBinding binding;
     Context context;
@@ -43,7 +46,7 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     ComposeAtcAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
-
+    String idPegawai = "405";
     SuinService mService;
 
     @Override
@@ -64,6 +67,13 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
         ComposeActivityVM viewModel = new ComposeActivityVM(this, jenis, idSuin);
         binding.setVm(viewModel);
 
+        if (jenis == 0){
+            binding.txJudul.setVisibility(View.VISIBLE);
+            binding.etJudul.setVisibility(View.VISIBLE);
+        }else {
+            binding.txJudul.setVisibility(View.GONE);
+            binding.etJudul.setVisibility(View.GONE);
+        }
         recyclerView = binding.rvAttachment;
         adapter = new ComposeAtcAdapter(this, lampiranParam, this);
         linearLayoutManager = new LinearLayoutManager(ComposeActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -77,7 +87,6 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     }
 
 
-
     public View.OnClickListener clickLampiran = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -87,14 +96,14 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
 
 
     @AfterPermissionGranted(REQUEST_CODE_LAMPIRAN)
-    void takeLampiran(){
-        String[] perms ={Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
-        if (EasyPermissions.hasPermissions(context,perms)){
+    void takeLampiran() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
             startActivityForResult(intent, REQUEST_CODE_LAMPIRAN);
-        }else {
+        } else {
             EasyPermissions.requestPermissions(this, this.getString(R.string.txt_storage), REQUEST_CODE_LAMPIRAN, perms);
         }
 
@@ -103,23 +112,37 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     public View.OnClickListener onClickPenerima = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //todo event ini ketika selesai mendapatkan id konten suin dari megirim suin nya
-            for (final LampiranParam param : lampiranParam) {
-
-                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
-                Call<BaseDao> postLampiran = mService.uploadLampiran("220", requestBody);
-                postLampiran.enqueue(new Callback<BaseDao>() {
-                    @Override
-                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
-                        Toast.makeText(context, param.namaFile, Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<BaseDao> call, Throwable t) {
-                        Toast.makeText(context, param.namaFile, Toast.LENGTH_LONG).show();
-                    }
-                });
+            if (jenis == 0) {
+                SuinParam param = new SuinParam();
+                param.idPegawai = idPegawai;
+                param.judul = "test";
+                param.pesan = binding.etPesan.getText().toString();
+                SearchPenerimaActivity.startThisActiviy(context, jenis, 0, "",param,null);
+            } else {
+                SuinBalasParam param = new SuinBalasParam();
+                param.idPegawai = idPegawai;
+                param.pesan = binding.etPesan.getText().toString();
+                SearchPenerimaActivity.startThisActiviy(context,jenis, 1, "",null,param);
             }
+
+
+//            //todo event ini ketika selesai mendapatkan id konten suin dari megirim suin nya
+//            for (final LampiranParam param : lampiranParam) {
+//
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
+//                Call<BaseDao> postLampiran = mService.uploadLampiran("220", requestBody);
+//                postLampiran.enqueue(new Callback<BaseDao>() {
+//                    @Override
+//                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
+//                        Toast.makeText(context, param.namaFile, Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<BaseDao> call, Throwable t) {
+//                        Toast.makeText(context, param.namaFile, Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//            }
 
         }
     };

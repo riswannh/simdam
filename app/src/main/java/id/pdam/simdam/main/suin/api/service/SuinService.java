@@ -12,6 +12,8 @@ import id.pdam.simdam.main.suin.shared.Constant;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -44,10 +46,37 @@ public interface SuinService {
             @Query("keyword") String keyword
     );
 
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
     @Multipart
     @POST(Constant.API.URL_POST_LAMPIRAN)
     Call<BaseDao> uploadLampiran(
             @Query("idKontenSuin") String idKontenSuin,
             @Part("lampiran\"") RequestBody lampiran
+    );
+
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
+    @FormUrlEncoded
+    @POST(Constant.API.URL_POST_SUIN)
+    Call<BaseDao> postSuin(
+            @Field("idPegawai") String idPegawai,
+            @Field("judul") String judul,
+            @Field("pesan") String pesan,
+            @Field("tembusan") String tembusan,
+            @Field("sms") String sms,
+            @Field("wa") String wa,
+            @Field("cekTembusan") String cekTembusan
+
+    );
+
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
+    @FormUrlEncoded
+    @POST(Constant.API.URL_POST_SUIN_BALAS)
+    Call<BaseDao> postSuinBalas(
+            @Field("idPegawai") String idPegawai,
+            @Field("tembusan") String tembusan,
+            @Field("cekTembusan") String cekTembusan,
+            @Field("sms") String sms,
+            @Field("wa") String wa,
+            @Field("pesan") String pesan
     );
 }
