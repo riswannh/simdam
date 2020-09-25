@@ -51,7 +51,7 @@ public interface SuinService {
     @POST(Constant.API.URL_POST_LAMPIRAN)
     Call<BaseDao> uploadLampiran(
             @Query("idKontenSuin") String idKontenSuin,
-            @Part("lampiran\"") RequestBody lampiran
+            @Part MultipartBody.Part lampiran
     );
 
     @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
