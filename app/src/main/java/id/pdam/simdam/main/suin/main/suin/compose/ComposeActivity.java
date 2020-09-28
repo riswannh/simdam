@@ -44,7 +44,7 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     SuinComposeActivityBinding binding;
     Context context;
     public static final int REQUEST_CODE_LAMPIRAN = 41;
-    private ArrayList<LampiranParam> lampiranParam = new ArrayList<>();
+    public static ArrayList<LampiranParam> lampiranParam = new ArrayList<>();
     ComposeAtcAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
@@ -114,38 +114,38 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     public View.OnClickListener onClickPenerima = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            if (jenis == 0) {
-//                SuinParam param = new SuinParam();
-//                param.idPegawai = idPegawai;
-//                param.judul = "test";
-//                param.pesan = binding.etPesan.getText().toString();
-//                SearchPenerimaActivity.startThisActiviy(context, jenis, 0, "",param,null);
-//            } else {
-//                SuinBalasParam param = new SuinBalasParam();
-//                param.idPegawai = idPegawai;
-//                param.pesan = binding.etPesan.getText().toString();
-//                SearchPenerimaActivity.startThisActiviy(context,jenis, 1, "",null,param);
-//            }
+            if (jenis == 0) {
+                SuinParam param = new SuinParam();
+                param.idPegawai = idPegawai;
+                param.judul = "test";
+                param.pesan = binding.etPesan.getText().toString();
+                SearchPenerimaActivity.startThisActiviy(context, jenis, 0, "",param,null);
+            } else {
+                SuinBalasParam param = new SuinBalasParam();
+                param.idPegawai = idPegawai;
+                param.pesan = binding.etPesan.getText().toString();
+                SearchPenerimaActivity.startThisActiviy(context,jenis, 1, "",null,param);
+            }
 
 
             //todo event ini ketika selesai mendapatkan id konten suin dari megirim suin nya
-            for (final LampiranParam param : lampiranParam) {
-
-                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
-                Call<BaseDao> postLampiran = mService.uploadLampiran("220", body);
-                postLampiran.enqueue(new Callback<BaseDao>() {
-                    @Override
-                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
-                        Log.d("TAG", response.raw().request().toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<BaseDao> call, Throwable t) {
-                    }
-                });
-            }
+//            for (final LampiranParam param : lampiranParam) {
+//
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
+//                MultipartBody.Part body =
+//                        MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
+//                Call<BaseDao> postLampiran = mService.uploadLampiran("220", body);
+//                postLampiran.enqueue(new Callback<BaseDao>() {
+//                    @Override
+//                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
+//                        Log.d("TAG", response.raw().request().toString());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<BaseDao> call, Throwable t) {
+//                    }
+//                });
+//            }
 
         }
     };

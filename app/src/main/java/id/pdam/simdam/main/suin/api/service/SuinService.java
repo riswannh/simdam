@@ -57,7 +57,7 @@ public interface SuinService {
     @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
     @FormUrlEncoded
     @POST(Constant.API.URL_POST_SUIN)
-    Call<BaseDao> postSuin(
+    Call<BaseDao<String>> postSuin(
             @Field("idPegawai") String idPegawai,
             @Field("judul") String judul,
             @Field("pesan") String pesan,
@@ -71,7 +71,7 @@ public interface SuinService {
     @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
     @FormUrlEncoded
     @POST(Constant.API.URL_POST_SUIN_BALAS)
-    Call<BaseDao> postSuinBalas(
+    Call<BaseDao<String>> postSuinBalas(
             @Field("idPegawai") String idPegawai,
             @Field("tembusan") String tembusan,
             @Field("cekTembusan") String cekTembusan,
