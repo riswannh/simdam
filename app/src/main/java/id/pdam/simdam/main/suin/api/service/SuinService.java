@@ -73,6 +73,7 @@ public interface SuinService {
     @POST(Constant.API.URL_POST_SUIN_BALAS)
     Call<BaseDao<String>> postSuinBalas(
             @Field("idPegawai") String idPegawai,
+            @Field("idSuin") String idSuin,
             @Field("tembusan") String tembusan,
             @Field("cekTembusan") String cekTembusan,
             @Field("sms") String sms,

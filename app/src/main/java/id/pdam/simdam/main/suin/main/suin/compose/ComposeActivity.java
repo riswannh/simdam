@@ -58,8 +58,8 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
         jenis = 0;
         idSuin = "test";
         mService = ApiClient.getClient().create(SuinService.class);
-//        jenis = getIntent().getIntExtra("jenis", 0);
-//        idSuin = getIntent().getStringExtra("idSuin");
+        jenis = getIntent().getIntExtra("jenis", 0);
+        idSuin = getIntent().getStringExtra("idSuin");
         config();
     }
 
@@ -124,7 +124,7 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
                 SuinBalasParam param = new SuinBalasParam();
                 param.idPegawai = idPegawai;
                 param.pesan = binding.etPesan.getText().toString();
-                SearchPenerimaActivity.startThisActiviy(context,jenis, 1, "",null,param);
+                SearchPenerimaActivity.startThisActiviy(context,jenis, 1, idSuin,null,param);
             }
 
 

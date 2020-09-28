@@ -141,23 +141,26 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                     postSuin.enqueue(new Callback<BaseDao<String>>() {
                         @Override
                         public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
-                            for (final LampiranParam param : ComposeActivity.lampiranParam) {
+                            if (!ComposeActivity.lampiranParam.isEmpty()) {
+                                for (final LampiranParam param : ComposeActivity.lampiranParam) {
 
-                                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
-                                MultipartBody.Part body =
-                                        MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
-                                Call<BaseDao> postLampiran = mService.uploadLampiran(response.body().DATA, body);
-                                postLampiran.enqueue(new Callback<BaseDao>() {
-                                    @Override
-                                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
-                                        Log.d("TAG", response.raw().request().toString());
-                                    }
+                                    RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
+                                    MultipartBody.Part body =
+                                            MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
+                                    Call<BaseDao> postLampiran = mService.uploadLampiran(response.body().DATA, body);
+                                    postLampiran.enqueue(new Callback<BaseDao>() {
+                                        @Override
+                                        public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
+                                            Log.d("TAG", response.raw().request().toString());
+                                        }
 
-                                    @Override
-                                    public void onFailure(Call<BaseDao> call, Throwable t) {
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<BaseDao> call, Throwable t) {
+                                        }
+                                    });
+                                }
                             }
+
                         }
 
                         @Override
@@ -166,27 +169,30 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                         }
                     });
                 } else {
-                    Call<BaseDao<String>> postSuinBalas = mService.postSuinBalas(balas.idPegawai, balas.tembusan, balas.cekTembusan, balas.sms, balas.cekTembusan, balas.pesan);
+                    Call<BaseDao<String>> postSuinBalas = mService.postSuinBalas(balas.idPegawai,idSuin ,balas.tembusan, balas.cekTembusan, balas.sms, balas.cekTembusan, balas.pesan);
                     postSuinBalas.enqueue(new Callback<BaseDao<String>>() {
                         @Override
                         public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
-                            for (final LampiranParam param : ComposeActivity.lampiranParam) {
+                            if (!ComposeActivity.lampiranParam.isEmpty()) {
+                                for (final LampiranParam param : ComposeActivity.lampiranParam) {
 
-                                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
-                                MultipartBody.Part body =
-                                        MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
-                                Call<BaseDao> postLampiran = mService.uploadLampiran(response.body().DATA, body);
-                                postLampiran.enqueue(new Callback<BaseDao>() {
-                                    @Override
-                                    public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
-                                        Log.d("TAG", response.raw().request().toString());
-                                    }
+                                    RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
+                                    MultipartBody.Part body =
+                                            MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
+                                    Call<BaseDao> postLampiran = mService.uploadLampiran(response.body().DATA, body);
+                                    postLampiran.enqueue(new Callback<BaseDao>() {
+                                        @Override
+                                        public void onResponse(Call<BaseDao> call, Response<BaseDao> response) {
+                                            Log.d("TAG", response.raw().request().toString());
+                                        }
 
-                                    @Override
-                                    public void onFailure(Call<BaseDao> call, Throwable t) {
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<BaseDao> call, Throwable t) {
+                                        }
+                                    });
+                                }
                             }
+
                         }
 
                         @Override

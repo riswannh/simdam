@@ -54,7 +54,7 @@ public class KontenActivity extends AppCompatActivity {
     private void config() {
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.konten_activity);
-        KontenVM viewModel = new KontenVM(this);
+        KontenVM viewModel = new KontenVM(this,idSuin);
         binding.setVm(viewModel);
         recyclerView = binding.rvKonten;
         adapter = new KontenAdapter(this, dataList);
