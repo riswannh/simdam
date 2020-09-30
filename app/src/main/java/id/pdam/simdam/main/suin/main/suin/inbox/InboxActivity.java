@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
     boolean isRefresh = false;
     boolean isLoad = false;
     boolean isCallApi = false;
+    String keyword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         adapter.setFooterVisible(true);
         adapter.setErrorFooter(0);
         recyclerView.setHasFixedSize(true);
+        binding.btnSearch.setOnClickListener(onClickSearch);
 
         swipeRefreshLayout = binding.srInbox;
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -76,16 +79,26 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
             @Override
             public void onRefresh() {
                 isRefresh = true;
+                keyword = "";
                 new Task().execute();
             }
         });
     }
 
-    public void callApi(int offset, int limit) {
+    private View.OnClickListener onClickSearch = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            keyword = binding.etSearch.getText().toString();
+            dataList.clear();
+            new Task().execute();
+        }
+    };
+
+    public void callApi(int offset, int limit,String keyword) {
         String idUser = "405";
         isCallApi = true;
         isLoad = true;
-        Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idUser, offset, limit);
+        Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idUser, offset, limit,keyword);
         callInbox.enqueue(new Callback<BaseDao<List<SuinInboxDao>>>() {
             @Override
             public void onResponse(Call<BaseDao<List<SuinInboxDao>>> call, Response<BaseDao<List<SuinInboxDao>>> response) {
@@ -98,7 +111,6 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
                     totalItem = 0;
                     isRefresh = false;
                 }
-
                 if (response.body().DATA.isEmpty()) {
                     dataList.clear();
                     adapter.setErrorFooter(1);
@@ -159,7 +171,7 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
 
         @Override
         protected Void doInBackground(Void... voids) {
-            callApi(offset,limit);
+            callApi(offset,limit,keyword);
             return null;
         }
     }

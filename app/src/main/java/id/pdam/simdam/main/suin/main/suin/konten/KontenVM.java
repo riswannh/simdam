@@ -19,7 +19,4 @@ public class KontenVM  {
 
     }
 
-    public void onClickBtnDelete(View v){
-        Toast.makeText(mActivity,"delete",Toast.LENGTH_LONG).show();
-    }
 }

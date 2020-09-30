@@ -10,7 +10,4 @@ public class InboxActivityVM {
         this.mActivity = mActivity;
     }
 
-    public void onClickSearch(View v){
-        Toast.makeText(mActivity,"search",Toast.LENGTH_LONG).show();
-    }
 }

@@ -17,5 +17,6 @@ public class Constant {
         public static final String URL_POST_LAMPIRAN = "suin/uploadlampiran";
         public static final String URL_POST_SUIN = "suin/sendsuin";
         public static final String URL_POST_SUIN_BALAS = "suin/suinbalas";
+        public static final String URL_POST_SUIN_DELETE = "suin/deletesuin";
     }
 }

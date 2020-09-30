@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +41,7 @@ public class KontenActivity extends AppCompatActivity {
     private int max = 10;
     boolean isLoad = false;
     boolean isCallApi = false;
-
+    String idUser = "405";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +66,30 @@ public class KontenActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         adapter.setFooterVisible(true);
         adapter.setErrorFooter(0);
+        binding.btnDelete.setOnClickListener(onClickDelete);
+
     }
 
+    public View.OnClickListener onClickDelete = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Call<BaseDao<String>> deleteSuin = mService.postDeleteSuin(idUser,idSuin);
+            deleteSuin.enqueue(new Callback<BaseDao<String>>() {
+                @Override
+                public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<BaseDao<String>> call, Throwable t) {
+
+                }
+            });
+        }
+    };
+
     public void callApi(String idSuin, int min, int max) {
-        String idUser = "405";
+
         isCallApi = true;
         isLoad = true;
         Call<BaseDao<List<KontenSuinDao>>> callInbox = mService.getBaca(idSuin, min, max);

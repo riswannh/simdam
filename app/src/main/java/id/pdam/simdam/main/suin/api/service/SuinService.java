@@ -27,7 +27,8 @@ public interface SuinService {
     Call<BaseDao<List<SuinInboxDao>>> getInbox(
             @Query("idPegawai") String idPegawai,
             @Query("offset") int offset,
-            @Query("limit") int limit
+            @Query("limit") int limit,
+            @Query("keyword") String keyword
     );
 
     @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
@@ -79,5 +80,13 @@ public interface SuinService {
             @Field("sms") String sms,
             @Field("wa") String wa,
             @Field("pesan") String pesan
+    );
+
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
+    @FormUrlEncoded
+    @POST(Constant.API.URL_POST_SUIN_DELETE)
+    Call<BaseDao<String>> postDeleteSuin(
+            @Field("idPegawai") String idPegawai,
+            @Field("idSuin") String idSuin
     );
 }

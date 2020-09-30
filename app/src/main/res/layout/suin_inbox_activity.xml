@@ -21,8 +21,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:ems="10"
+            android:hint="Cari Judul"
             android:inputType="textPersonName"
-            android:text="Search"
             app:layout_constraintEnd_toStartOf="@+id/btnSearch"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +38,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/etSearch"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_search_24"
-            android:onClick="@{vm::onClickSearch}"/>
+            app:srcCompat="@drawable/ic_baseline_search_24" />
 
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
