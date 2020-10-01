@@ -18,5 +18,9 @@ public class Constant {
         public static final String URL_POST_SUIN = "suin/sendsuin";
         public static final String URL_POST_SUIN_BALAS = "suin/suinbalas";
         public static final String URL_POST_SUIN_DELETE = "suin/deletesuin";
+        public static final String URL_POST_SUIN_SET_BACA = "suin/setbaca";
+    }
+    public class PREF{
+        public static final String USER_ID = "user_id";
     }
 }

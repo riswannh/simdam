@@ -6,4 +6,5 @@ public class KontenSuinDao {
     public String PENGIRIM;
     public String ISI_SURAT;
     public String TGL_SURAT;
+    public String LAMPIRAN;
 }

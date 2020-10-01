@@ -2,6 +2,7 @@ package id.pdam.simdam.main.suin.main.suin.konten;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -28,20 +29,21 @@ public class KontenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private boolean isFooterVisible;
     private int errorFooter;
 
-    public KontenAdapter(Context context,ArrayList<KontenSuinDao> dataList){
-    this.dataList = dataList;
-    this.context = context;
+    public KontenAdapter(Context context, ArrayList<KontenSuinDao> dataList) {
+        this.dataList = dataList;
+        this.context = context;
     }
+
     @Override
     public int getItemViewType(int position) {
         String idUser = "405";
         if (position == dataList.size()) {
             return TYPE_FOOTER;
         }
-        if (dataList.get(position).ID_PEG_PENGIRIM.equals(idUser)){
+        if (dataList.get(position).ID_PEG_PENGIRIM.equals(idUser)) {
             return TYPE_ITEM_SENT;
-        }else {
-            return  TYPE_ITEM_RECEIVED;
+        } else {
+            return TYPE_ITEM_RECEIVED;
         }
     }
 
@@ -56,7 +58,7 @@ public class KontenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else if (viewType == TYPE_ITEM_RECEIVED) {
             ItemMassageReceivedBinding binding = ItemMassageReceivedBinding.inflate(layoutInflater, parent, false);
             return new ReceivedItemHolder(binding);
-        }else if (viewType == TYPE_FOOTER) {
+        } else if (viewType == TYPE_FOOTER) {
             SuinFooterBinding binding = SuinFooterBinding.inflate(layoutInflater, parent, false);
             return new FooterHolder(binding);
         } else return null;
@@ -65,33 +67,47 @@ public class KontenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SentItemHolder) {
-            String bodyData = dataList.get(position).ISI_SURAT.replaceAll("\\n","");
+            String pesan;
+            if (dataList.get(position).LAMPIRAN == null) {
+                pesan = dataList.get(position).ISI_SURAT;
+            } else {
+                pesan = dataList.get(position).ISI_SURAT + dataList.get(position).LAMPIRAN;
+            }
+            String bodyData = pesan.replaceAll("\\n", "");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                ((SentItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData,Html.FROM_HTML_MODE_LEGACY));
+                ((SentItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData, Html.FROM_HTML_MODE_LEGACY));
             } else {
                 ((SentItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData));
             }
+            ((SentItemHolder) holder).getBinding().txtBody.setMovementMethod(LinkMovementMethod.getInstance());
             ((SentItemHolder) holder).getBinding().txtTime.setText(dataList.get(position).TGL_SURAT);
-        }else if (holder instanceof ReceivedItemHolder){
-            String bodyData = dataList.get(position).ISI_SURAT.replaceAll("\\n","");
+        } else if (holder instanceof ReceivedItemHolder) {
+            String pesan;
+            if (dataList.get(position).LAMPIRAN == null) {
+                pesan = dataList.get(position).ISI_SURAT;
+            } else {
+                pesan = dataList.get(position).ISI_SURAT + dataList.get(position).LAMPIRAN;
+            }
+            String bodyData = pesan.replaceAll("\\n", "");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                ((ReceivedItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData,Html.FROM_HTML_MODE_LEGACY));
+                ((ReceivedItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData, Html.FROM_HTML_MODE_LEGACY));
             } else {
                 ((ReceivedItemHolder) holder).getBinding().txtBody.setText(Html.fromHtml(bodyData));
             }
+            ((SentItemHolder) holder).getBinding().txtBody.setMovementMethod(LinkMovementMethod.getInstance());
             ((ReceivedItemHolder) holder).getBinding().txtTime.setText(dataList.get(position).TGL_SURAT);
             ((ReceivedItemHolder) holder).getBinding().txtName.setText(dataList.get(position).PENGIRIM);
-        }else if (holder instanceof FooterHolder){
-            SuinFooterVM viewVM = new SuinFooterVM(errorFooter,isFooterVisible);
-            ((FooterHolder)holder).getBinding().setVariable(BR.vm, viewVM);
+        } else if (holder instanceof FooterHolder) {
+            SuinFooterVM viewVM = new SuinFooterVM(errorFooter, isFooterVisible);
+            ((FooterHolder) holder).getBinding().setVariable(BR.vm, viewVM);
         }
     }
 
-    public void setFooterVisible(boolean footerVisible){
-        if (isFooterVisible){
+    public void setFooterVisible(boolean footerVisible) {
+        if (isFooterVisible) {
             isFooterVisible = footerVisible;
-            notifyItemChanged(dataList.size() +1);
-        }else {
+            notifyItemChanged(dataList.size() + 1);
+        } else {
             isFooterVisible = footerVisible;
             notifyItemChanged(dataList.size());
         }
@@ -104,7 +120,7 @@ public class KontenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return dataList.size()+1;
+        return dataList.size() + 1;
     }
 
     public class SentItemHolder extends RecyclerView.ViewHolder {

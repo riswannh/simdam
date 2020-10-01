@@ -12,31 +12,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import id.pdam.simdam.R;
 import id.pdam.simdam.databinding.SuinComposeActivityBinding;
-import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.param.LampiranParam;
 import id.pdam.simdam.main.suin.api.param.SuinBalasParam;
 import id.pdam.simdam.main.suin.api.param.SuinParam;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
 import id.pdam.simdam.main.suin.main.suin.compose.penerima.SearchPenerimaActivity;
+import id.pdam.simdam.main.suin.shared.Constant;
 import id.pdam.simdam.main.suin.shared.FileUtil;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import id.pdam.simdam.main.suin.shared.PrefHelper;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdapter.AdapterListener {
     int jenis = 0;
@@ -48,7 +41,7 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     ComposeAtcAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
-    String idPegawai = "405";
+    String idUser;
     SuinService mService;
 
     @Override
@@ -64,6 +57,8 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
     }
 
     private void config() {
+        lampiranParam.clear();
+        idUser = PrefHelper.getPref(this, Constant.PREF.USER_ID);
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.suin_compose_activity);
         ComposeActivityVM viewModel = new ComposeActivityVM(this, jenis, idSuin);
@@ -116,13 +111,13 @@ public class ComposeActivity extends AppCompatActivity implements ComposeAtcAdap
         public void onClick(View v) {
             if (jenis == 0) {
                 SuinParam param = new SuinParam();
-                param.idPegawai = idPegawai;
-                param.judul = "test";
+                param.idPegawai = idUser;
+                param.judul = binding.etJudul.getText().toString();
                 param.pesan = binding.etPesan.getText().toString();
                 SearchPenerimaActivity.startThisActiviy(context, jenis, 0, "",param,null);
             } else {
                 SuinBalasParam param = new SuinBalasParam();
-                param.idPegawai = idPegawai;
+                param.idPegawai = idUser;
                 param.pesan = binding.etPesan.getText().toString();
                 SearchPenerimaActivity.startThisActiviy(context,jenis, 1, idSuin,null,param);
             }

@@ -23,7 +23,10 @@ import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.SuinInboxDao;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
+import id.pdam.simdam.main.suin.main.menu.MenuSuinActivity;
 import id.pdam.simdam.main.suin.main.suin.konten.KontenActivity;
+import id.pdam.simdam.main.suin.shared.Constant;
+import id.pdam.simdam.main.suin.shared.PrefHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,8 +97,14 @@ public class InboxActivity extends AppCompatActivity implements InboxAdapter.Ada
         }
     };
 
-    public void callApi(int offset, int limit,String keyword) {
-        String idUser = "405";
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MenuSuinActivity.startThisActivity(context);
+    }
+
+    public void callApi(int offset, int limit, String keyword) {
+        String idUser = PrefHelper.getPref(this, Constant.PREF.USER_ID);
         isCallApi = true;
         isLoad = true;
         Call<BaseDao<List<SuinInboxDao>>> callInbox = mService.getInbox(idUser, offset, limit,keyword);

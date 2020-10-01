@@ -28,6 +28,7 @@ import id.pdam.simdam.main.suin.api.param.SuinParam;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
 import id.pdam.simdam.main.suin.main.suin.compose.ComposeActivity;
+import id.pdam.simdam.main.suin.main.suin.inbox.InboxActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -137,13 +138,12 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                     suin.cekTembusan = "1";
                 }
                 if (jenis == 0) {
-                    Call<BaseDao<String>> postSuin = mService.postSuin(suin.idPegawai, suin.judul, suin.pesan, suin.tembusan, suin.sms, suin.wa, suin.cekTembusan);
+                    Call<BaseDao<String>> postSuin = mService.postSuin(suin.idPegawai, suin.judul, suin.pesan,suin.kpd, suin.tembusan, suin.sms, suin.wa, suin.cekTembusan);
                     postSuin.enqueue(new Callback<BaseDao<String>>() {
                         @Override
                         public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
                             if (!ComposeActivity.lampiranParam.isEmpty()) {
                                 for (final LampiranParam param : ComposeActivity.lampiranParam) {
-
                                     RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
                                     MultipartBody.Part body =
                                             MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
@@ -160,7 +160,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                                     });
                                 }
                             }
-
+                            InboxActivity.startThisActivity(context);
                         }
 
                         @Override
@@ -169,13 +169,12 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                         }
                     });
                 } else {
-                    Call<BaseDao<String>> postSuinBalas = mService.postSuinBalas(balas.idPegawai,idSuin ,balas.tembusan, balas.cekTembusan, balas.sms, balas.cekTembusan, balas.pesan);
+                    Call<BaseDao<String>> postSuinBalas = mService.postSuinBalas(balas.idPegawai, idSuin, balas.tembusan, balas.cekTembusan, balas.sms, balas.cekTembusan, balas.pesan);
                     postSuinBalas.enqueue(new Callback<BaseDao<String>>() {
                         @Override
                         public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
                             if (!ComposeActivity.lampiranParam.isEmpty()) {
                                 for (final LampiranParam param : ComposeActivity.lampiranParam) {
-
                                     RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), param.lampiran);
                                     MultipartBody.Part body =
                                             MultipartBody.Part.createFormData("lampiran", param.lampiran.getName(), requestBody);
@@ -192,7 +191,7 @@ public class SearchPenerimaActivity extends AppCompatActivity implements SearchP
                                     });
                                 }
                             }
-
+                            InboxActivity.startThisActivity(context);
                         }
 
                         @Override

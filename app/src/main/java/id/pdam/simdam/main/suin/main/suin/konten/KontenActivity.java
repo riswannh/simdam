@@ -22,6 +22,9 @@ import id.pdam.simdam.main.suin.api.dao.BaseDao;
 import id.pdam.simdam.main.suin.api.dao.KontenSuinDao;
 import id.pdam.simdam.main.suin.api.pdamapi.ApiClient;
 import id.pdam.simdam.main.suin.api.service.SuinService;
+import id.pdam.simdam.main.suin.main.suin.inbox.InboxActivity;
+import id.pdam.simdam.main.suin.shared.Constant;
+import id.pdam.simdam.main.suin.shared.PrefHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +44,7 @@ public class KontenActivity extends AppCompatActivity {
     private int max = 10;
     boolean isLoad = false;
     boolean isCallApi = false;
-    String idUser = "405";
+    String idUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class KontenActivity extends AppCompatActivity {
     }
 
     private void config() {
+        idUser = PrefHelper.getPref(this, Constant.PREF.USER_ID);
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.konten_activity);
         KontenVM viewModel = new KontenVM(this,idSuin);
@@ -67,7 +71,18 @@ public class KontenActivity extends AppCompatActivity {
         adapter.setFooterVisible(true);
         adapter.setErrorFooter(0);
         binding.btnDelete.setOnClickListener(onClickDelete);
+        Call<BaseDao<String>> setBaca = mService.setBaca(idUser,idSuin);
+        setBaca.enqueue(new Callback<BaseDao<String>>() {
+            @Override
+            public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
 
+            }
+
+            @Override
+            public void onFailure(Call<BaseDao<String>> call, Throwable t) {
+
+            }
+        });
     }
 
     public View.OnClickListener onClickDelete = new View.OnClickListener() {
@@ -77,7 +92,7 @@ public class KontenActivity extends AppCompatActivity {
             deleteSuin.enqueue(new Callback<BaseDao<String>>() {
                 @Override
                 public void onResponse(Call<BaseDao<String>> call, Response<BaseDao<String>> response) {
-                    finish();
+                    InboxActivity.startThisActivity(context);
                 }
 
                 @Override

@@ -62,6 +62,7 @@ public interface SuinService {
             @Field("idPegawai") String idPegawai,
             @Field("judul") String judul,
             @Field("pesan") String pesan,
+            @Field("kpd") String kpd,
             @Field("tembusan") String tembusan,
             @Field("sms") String sms,
             @Field("wa") String wa,
@@ -86,6 +87,14 @@ public interface SuinService {
     @FormUrlEncoded
     @POST(Constant.API.URL_POST_SUIN_DELETE)
     Call<BaseDao<String>> postDeleteSuin(
+            @Field("idPegawai") String idPegawai,
+            @Field("idSuin") String idSuin
+    );
+
+    @Headers({"X-Auth-Token: " + Constant.HEADER.token, "X-Auth-User: " + Constant.HEADER.auth})
+    @FormUrlEncoded
+    @POST(Constant.API.URL_POST_SUIN_SET_BACA)
+    Call<BaseDao<String>> setBaca(
             @Field("idPegawai") String idPegawai,
             @Field("idSuin") String idSuin
     );
